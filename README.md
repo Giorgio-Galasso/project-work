@@ -1,34 +1,47 @@
-# project-work
+# Vehicle Routing Problem (VRP) with Load-Dependent Costs
 
-### Repository Setup
+## Overview
 
-1. Create a Git repository named project-work.
-2. Inside the repository, include:
-    - A Python script named Problem.py which generates the problem through the class constructor and the baseline solution. 
-    - A Python file named s<student_id>.py that contains a function named solution(p:Problem) which receives as input an instance of the class Problem which generates the problem.
-    - A folder named src/ containing all additional code required to run your solution.
-    - A TXT file named base_requirements.txt containing the basic python libraries that you need to run the code to generate the problem.
+This repository contains a Python implementation of a **Hybrid Memetic Algorithm** designed to solve a variation of the Vehicle Routing Problem (VRP) where the travel cost is non-linear and dependent on the carried load.
 
+The solution is highly optimized using **Numba** for JIT compilation and features an adaptive strategy that changes behavior based on the problem's structural parameters (alpha and beta).
 
-### Main File Requirements (s<student_id>.py)
+## Key Features
 
-1. Import the class responsible from Problem.py for generating the problem in your code.
-2. Implement a method called solution() to place in s<student_id>.py that returns the optimal path in the following format: 
-```python
-[(c1, g1), (c2, g2), …, (cN, gN), (0, 0)]
+* **Adaptive Strategy**
+    * **Low Penalty (beta <= 1):** Uses a Genetic Algorithm with **Large Neighborhood Search (LNS)** and **2-opt** local search to optimize geometry.
+    * **High Penalty (beta > 1):** Uses a **Bulk Removal** preprocessing step to handle heavy loads via dedicated trips, focusing on weight minimization.
+
+* **Prins Split Algorithm**
+    Efficiently converts a TSP-like permutation (Giant Tour) into valid VRP trips using a shortest-path approach on a DAG.
+
+* **Hybrid Operators**
+    Includes IOX Crossover, Inversion/Swap Mutation, and Smart LNS (Destroy & Repair).
+
+* **High Performance**
+    Critical path evaluations are accelerated using `numba` and `numpy`.
+
+## Project Structure
+
+```text
+.
+├── Problem.py              # Problem generator class
+├── s319497.py              # Main entry point (Solution function)
+├── base_requirements.txt   # Dependencies
+└── src/
+    ├── algorithms.py       # Core logic (Split, GA operators, LNS) - JIT compiled
+    ├── evaluator.py        # SmartEvaluator class and preprocessing logic
+    └── utils.py            # Mathematical cost 
 ```
-where:
-- c1, …, cN represent the sequence of cities visited.
-- g1, …, gN represent the corresponding gold collected at each city.
 
+## Requirements
+To run the code, install the required dependencies:
+```text
+pip install -r base_requirements.txt
+```
 
-### Rules
-1. The thief must start and finish at (0, 0).
-2. Returning to (0, 0) during the route is allowed to unload collected gold before continuing.
-3. Don't forget to change the name of the file s123456.py provided as an example ;).
+## Usage
+The solution is encapsulated in the ```solution(p: Problem)``` function within ```s319497.py```. It takes a ```Problem``` instance as input and returns the optimal path as a list of tuples in the format ```[(node, gold_collected), ...]```.
 
-### Notes
-- It is not necessary to push the report.pdf or log.pdf in this repo.
-- It is mandatory to upload it in "materiale" section of "portale della didattica" at least 168 hours before the exam call.
-- For well commented codes, I can't ensure a higher mark but they would be very welcome.
-- In case you face any issue or you have any doubt text me at the email giuseppe.esposito@polito.it and professor Squillero giovanni.squillero@polito.it.
+## Acknowledgments
+The code documentation, docstrings, and comments throughout this project were generated and refined with the assistance of Google Gemini.

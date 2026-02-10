@@ -1,4 +1,5 @@
-icecream
+networkx
 numpy
 matplotlib
-networkx
+numba
+tqdm
