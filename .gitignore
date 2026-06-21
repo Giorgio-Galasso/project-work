@@ -1,1 +1,3 @@
-computational-intelligence_staff/*
+__pycache__/
+*.py[cod]
+*$py.class
